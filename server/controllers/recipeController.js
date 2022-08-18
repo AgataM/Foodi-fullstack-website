@@ -22,7 +22,7 @@ exports.homepage = async(req, res) => {
         const food = {latest, rice, oats, riceNoodles, bananas, pancakes}
         res.render('index', { title: 'Recipe Website', categories, food})
     } catch (error) {
-        res.status(500).send({message: error.messager || "Error Occured"})
+        res.status(500).send({message: error.message || "Error Occured"})
     }
     
 }
@@ -43,6 +43,41 @@ exports.homepage = async(req, res) => {
     }
     
 }
+
+
+/**
+ * GET /categories/:id
+ * Categories By Id
+ */
+ exports.exploreCategoriesById = async(req, res) => {
+
+    try {
+        let categoryId = req.params.id
+        const limitNumber = 5
+        const categoryById = await Category.find({'category': categoryId}).limit(limitNumber)
+        res.render('categories', { title: 'Recipe Categories', categoryById})
+    } catch (error) {
+        res.status(500).send({message: error.messager || "Error Occured"})
+    }
+    
+}
+
+
+/**
+ * GET /recipe/:id
+ * Recipe
+ */
+ exports.exploreRecipe = async(req, res) => {
+
+    try {
+        let recipeId = req.params.id;
+        const recipe = await Recipe.findById(recipeId);
+        res.render('recipe', { title: 'Recipes', recipe})
+    } catch (error) {
+        res.status(500).send({message: error.messager || "Error Occured"})
+    }
+ }
+
 
 
 
@@ -113,4 +148,8 @@ insertDummyCategoryData() */
 }
 
 insertDummyRecipeData()*/
+
+
+
+
 
