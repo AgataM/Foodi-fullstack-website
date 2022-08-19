@@ -53,8 +53,9 @@ exports.homepage = async(req, res) => {
 
     try {
         let categoryId = req.params.id
+        
         const limitNumber = 5
-        const categoryById = await Category.find({'category': categoryId}).limit(limitNumber)
+        const categoryById = await Recipe.find({'category': categoryId}).sort({_id: -1}).limit(limitNumber)
         res.render('categories', { title: 'Recipe Categories', categoryById})
     } catch (error) {
         res.status(500).send({message: error.messager || "Error Occured"})
@@ -123,6 +124,13 @@ insertDummyCategoryData() */
                 "name": "Egg Rice",
                 "description": "Cook rice and fry two eggs. Later fry some spring onions until browned and then add the rice to the pan. Next add dark and light soy sauce. Put everything on a plate with the egg on top of the dish.",
                 "ingredients": ['eggs', 'rice', 'spring onions', 'dark and light soy sauce',],
+                "category": "Rice",
+                "image": "rice-category1.jpg"
+            },
+            {
+                "name": "Rice and Bacon",
+                "description": "Cook rice and fry some bacon slices. Mix the two together",
+                "ingredients": ['rice', 'bacon'],
                 "category": "Rice",
                 "image": "rice-category1.jpg"
             },
