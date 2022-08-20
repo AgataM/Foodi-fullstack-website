@@ -80,10 +80,65 @@ exports.homepage = async(req, res) => {
  }
 
 
+/**
+ * POST /search
+ * Search
+ */
+
+ exports.searchRecipe = async(req, res) => {
+    try {
+        let searchTerm = req.body.searchTerm
+        let recipe = await Recipe.find({ $text: {$search: searchTerm, $diacriticSensitive: true}})
+        //res.json(recipe)
+        res.render('search', { title: 'Search', recipe})
+    } catch (error) {
+         res.status(500).send({message: error.messager || "Error Occured"})
+}
+}
+
+/**
+ * GET /explore-latest
+ * Explore Latest
+ */
+
+ exports.exploreLatest = async(req, res) => {
+    try {
+        const limitNumber = 5;
+        const recipe = await Recipe.find({}).sort({_id: -1}).limit(limitNumber);
+        res.render('explore-latest', { title: 'Latest Recipes', recipe})
+    } catch (error) {
+         res.status(500).send({message: error.messager || "Error Occured"})
+}
+}
 
 
+/**
+ * GET /random-recipe
+ * Random Recipe
+ */
+
+ exports.randomRecipe = async(req, res) => {
+    try {
+        let recipeId = req.params.id;
+        //let count = await Recipe.findById(recipeId).countDocuments();
+        let count = await Recipe.find().countDocuments();
+        let random = Math.floor(Math.random(recipeId) * count);
+        let recipe = await Recipe.findOne().skip(random).exec();
+        res.render('random-recipe', { title: 'Random Recipe', recipe})
+    } catch (error) {
+         res.status(500).send({message: error.messager || "Error Occured"})
+}
+}
 
 
+/**
+ * GET /submit-recipe
+ * Submit Recipe
+ */
+
+ exports.submitRecipe = async(req, res) => {
+    res.render('submit-recipe', { title: 'Submit Recipe'})
+ }
 
 //ADDING EXAMPLES TO DB/ Dummy data
 /*async function insertDummyCategoryData(){
@@ -156,8 +211,3 @@ insertDummyCategoryData() */
 }
 
 insertDummyRecipeData()*/
-
-
-
-
-

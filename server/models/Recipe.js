@@ -20,6 +20,7 @@ const recipeSchema = new mongoose.Schema({
     },
     category:{
         type: String,
+        //disable adding other categories than those specified:
         enum: ['Rice', 'Oats', 'Rice Noodles', 'Bananas', 'Pancakes'],
         required: "This is required"
     },
@@ -29,5 +30,11 @@ const recipeSchema = new mongoose.Schema({
     }
     
 })
+
+recipeSchema.index({name: 'text', description: 'text'})
+
+//WildCard Indexing
+//recipeSchema.index({"$**" : 'text'})
+
 
 module.exports = mongoose.model('Recipe', recipeSchema)
