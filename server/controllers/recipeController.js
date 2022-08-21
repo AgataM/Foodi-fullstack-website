@@ -103,7 +103,7 @@ exports.homepage = async(req, res) => {
 
  exports.exploreLatest = async(req, res) => {
     try {
-        const limitNumber = 5;
+        const limitNumber = 10;
         const recipe = await Recipe.find({}).sort({_id: -1}).limit(limitNumber);
         res.render('explore-latest', { title: 'Latest Recipes', recipe})
     } catch (error) {
@@ -137,8 +137,84 @@ exports.homepage = async(req, res) => {
  */
 
  exports.submitRecipe = async(req, res) => {
-    res.render('submit-recipe', { title: 'Submit Recipe'})
+    const infoErrorsObj = req.flash('infoErrors');
+    const infoSubmitObj = req.flash('infoSubmit');
+
+    res.render('submit-recipe', { title: 'Submit your Recipe', infoErrorsObj,  infoSubmitObj});
  }
+
+/**
+ * POST /submit-recipe
+ * Submit Recipe
+ */
+
+ exports.submitRecipeOnPost = async(req, res) => {
+
+    try{
+        let imageUploadFile;
+        let uploadPath;
+        let newImageName;
+
+        if(!req.files || Object.keys(req.files).length === 0){
+            console.log('No files were uploaded.')
+        } else {
+            imageUploadFile = req.files.image;
+            newImageName = Date.now() + imageUploadFile.name;
+
+            uploadPath = require('path').resolve('./') + '/public/img/' + newImageName;
+
+            imageUploadFile.mv(uploadPath, function(err){
+                if(err)return res.status(500).send(err);
+            })
+        }
+
+
+        const newRecipe = new Recipe({
+            name: req.body.name,
+            description: req.body.description,
+            ingredients: req.body.ingredients,
+            category: req.body.category,
+            image: newImageName
+        });
+
+        await newRecipe.save();
+
+        req.flash('infoSubmit', 'Recipe successfully added.')
+        res.redirect('/submit-recipe')
+
+    }catch(error){
+        //res.json(error)
+        req.flash('infoErrors', error)
+        res.redirect('/submit-recipe')
+    }  
+ }
+
+
+ //UPDATING RECIPES
+async function updateRecipe(){
+    
+    try{
+        const res = await Recipe.updateOne({
+            name: 'Vegeta'}, { name: 'Updated'}
+            )
+            res.n // Number of documents matched
+            res.nModified // Number of modified documents
+    }catch(error){
+        console.log(error)
+    }
+}
+updateRecipe()
+
+
+//DELETING RECIPES
+async function deleteRecipe(){
+    try {
+        await Recipe.deleteOne({name: 'Updated'})
+    } catch(error) {
+        console.log(error)
+    }
+}
+deleteRecipe()
 
 //ADDING EXAMPLES TO DB/ Dummy data
 /*async function insertDummyCategoryData(){

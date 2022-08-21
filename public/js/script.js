@@ -27,7 +27,7 @@ addIngredientsBtn.addEventListener('click', function(){
 //SremoveIngredient.parentNode.parentNode.removeChild(removeIngredient.parentNode)
 
 let input = document.getElementById('target')
-let data = '<label>Ingredient:</label><input type="text" name="temp"/>'
+let data = '<label>Next ingredient: </label> <input type="text" name="temp"/>'
 
 function addNew() {
   var newContent = document.createElement('div');

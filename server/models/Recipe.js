@@ -21,7 +21,7 @@ const recipeSchema = new mongoose.Schema({
     category:{
         type: String,
         //disable adding other categories than those specified:
-        enum: ['Rice', 'Oats', 'Rice Noodles', 'Bananas', 'Pancakes'],
+        enum: ['Rice', 'Oats', 'Rice Noodles', 'Bananas', 'Pancakes', 'Fish', 'Fruit', 'Breakfast', 'Lunch', 'Dinner'],
         required: "This is required"
     },
     image:{
