@@ -8,7 +8,7 @@ const cors = require('cors')
 
 const app = express();
  
-//const port = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 require('dotenv').config();
 
@@ -36,6 +36,6 @@ const routes = require('./server/routes/recipeRoutes.js')
 app.use('/', routes)
 
 //app.listen(port, ()=> console.log(`Listening to port ${port}`))
-app.listen(process.env.PORT || 5000, function(){
-    console.log(`Listening to port ${PORT}`, this.address().port, app.settings.env);
-  });
+app.listen(PORT, () =>
+  console.log(`Application is listening on port ${PORT}!`)
+);
