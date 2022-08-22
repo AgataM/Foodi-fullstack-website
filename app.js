@@ -4,13 +4,15 @@ const fileUpload = require('express-fileupload');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
+const cors = require('cors')
 
 const app = express();
-//!!!!!!!!!!!!!!!!!!change port value 
+ 
 const port = process.env.PORT || 5000;
 
 require('dotenv').config();
 
+app.use(cors())
 
 //USE EXPRESS
 app.use(express.urlencoded({extended: true}));
